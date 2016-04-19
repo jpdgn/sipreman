@@ -47,6 +47,7 @@ module.exports = function(router, connection, md5){
 	// PRODI
 	router.get('/prodi', prodi.getAllProdi);
 	router.post('/prodi', prodi.createProdi);
+	router.put('/prodi', prodi.updateProdi)
 
 	// JURUSAN
 	router.get('/jurusan', jurusan.getAllJurusan);
