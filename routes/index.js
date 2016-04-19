@@ -5,6 +5,10 @@ module.exports = function(router, connection, md5){
 	var mk = require('./api/app/mata-kuliah');
 	var ruangan = require('./api/app/ruangan');
 	var kelas = require('./api/app/kelas');
+	var prodi = require('./api/app/prodi');
+	var jurusan = require('./api/app/jurusan');
+	var jadwal = require('./api/app/jadwal');
+	var jabatan = require('./api/app/jabatan');
 
 	router.get('/', function(req, res) {
 		res.json('Hello API');
@@ -39,4 +43,19 @@ module.exports = function(router, connection, md5){
 	router.get('/kelas/:id', kelas.getKelasById);
 	router.post('/kelas', kelas.createKelas);
 	router.put('/kelas/:id', kelas.updateKelas);
+
+	// PRODI
+	router.get('/prodi', prodi.getAllProdi);
+	router.post('/prodi', prodi.createProdi);
+
+	// JURUSAN
+	router.get('/jurusan', jurusan.getAllJurusan);
+	router.post('/jurusan', jurusan.createJurusan);
+
+	// JADWAL
+	router.get('/jadwal', jadwal.getAllJadwal);
+
+	// JABATAN
+	router.get('/jabatan', jabatan.getAllJabatan);
+	router.post('/jabatan', jabatan.createJabatan);
 }

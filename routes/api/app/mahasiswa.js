@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var connection = require('../../../config/database.js');
 
 exports.getAllMahasiswa = function(req, res) {
-	var query = ('SELECT * FROM mahasiswa JOIN kelas ON mahasiswa.kelas_id = kelas.kode_kelas JOIN prodi ON kelas.id_prodi = prodi.kode_prodi JOIN jurusan ON prodi.id_jurusan = jurusan.kode_jurusan');
+	var query = ('SELECT * FROM mahasiswa JOIN kelas ON mahasiswa.kelas_id = kelas.id JOIN prodi ON kelas.prodi_id = prodi.id JOIN jurusan ON prodi.jurusan_id = jurusan.id');
 	connection.query(query, function(err, rows) {
 		if(err) return res.json({success: false, message: err});
 		res.json({success: true, data: rows});

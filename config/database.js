@@ -6,7 +6,7 @@ var db = 'null';
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'sipreman',
+    database: 'sipreman2',
     debug: false
   });
   pool.getConnection(function(err){
