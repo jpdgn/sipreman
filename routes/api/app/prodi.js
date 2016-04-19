@@ -54,24 +54,24 @@ exports.createProdi = function(req, res) {
 	})
 }
 
-// exports.updateKelas = function(req, res) {
-// 	if(!req.body.nama || !req.body.tahun_masuk || !req.body.jumlah_mahasiswa) return res.json({success: false});
-// 	var sql = "UPDATE ?? SET ??=?,??=?,??=? WHERE id_kelas = ?";
-// 	var insert = ["kelas", "nama_kelas", req.body.nama, "tahun_masuk", req.body.tahun_masuk,
-// 					"jumlah_mahasiswa", req.body.jumlah_mahasiswa, req.params.id];
-// 	sql = mysql.format(sql, insert);
-// 	console.log(sql);
-// 	connection.query(sql, function(err, result) {
-// 		if(err) {
-// 			return res.json({
-// 				success: false,
-// 				message: err
-// 			});
-// 		}
-// 		return res.json({
-// 			success: true,
-// 			message: "Berhasil memperbarui data kelas",
-// 			data: result
-// 		})
-// 	})
-// }
+exports.updateProdi = function(req, res) {
+	if(!req.body.nama || !req.body.tahun_masuk || !req.body.jumlah_mahasiswa) return res.json({success: false});
+	var sql = "UPDATE ?? SET ??=?,??=?,??=? WHERE id_kelas = ?";
+	var insert = ["kelas", "nama_kelas", req.body.nama, "tahun_masuk", req.body.tahun_masuk,
+					"jumlah_mahasiswa", req.body.jumlah_mahasiswa, req.params.id];
+	sql = mysql.format(sql, insert);
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			});
+		}
+		return res.json({
+			success: true,
+			message: "Berhasil memperbarui data kelas",
+			data: result
+		})
+	})
+}
