@@ -11,6 +11,7 @@ var connection = require('./config/database.js');
 function REST(){
   if(connection) {
   	this.ce(connection)
+    console.log('Connection successfully established');
   } else {
   	this.stop();
   }

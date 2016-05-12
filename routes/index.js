@@ -1,5 +1,5 @@
 module.exports = function(router, connection, md5){
-	
+
 	var mahasiswa = require('./api/app/mahasiswa');
 	var dosen = require('./api/app/dosen');
 	var mk = require('./api/app/mata-kuliah');
@@ -9,6 +9,8 @@ module.exports = function(router, connection, md5){
 	var jurusan = require('./api/app/jurusan');
 	var jadwal = require('./api/app/jadwal');
 	var jabatan = require('./api/app/jabatan');
+	var semester = require('./api/app/semester');
+	var akademik = require('./api/app/akademik');
 
 	router.get('/', function(req, res) {
 		res.json('Hello API');
@@ -19,6 +21,7 @@ module.exports = function(router, connection, md5){
 	router.get('/mahasiswa/:nim', mahasiswa.getMahasiswaByNim);
 	router.post('/mahasiswa', mahasiswa.createMahasiswa);
 	router.put('/mahasiswa/:nim', mahasiswa.updateMahasiswa);
+	router.delete('/mahasiswa/:nim', mahasiswa.deleteMahasiswa);
 
 	// DOSEN
 	router.get('/dosen', dosen.getAllDosen);
@@ -46,17 +49,37 @@ module.exports = function(router, connection, md5){
 
 	// PRODI
 	router.get('/prodi', prodi.getAllProdi);
+	router.get('/prodi/:id', prodi.getProdiById);
 	router.post('/prodi', prodi.createProdi);
-	router.put('/prodi', prodi.updateProdi)
+	router.put('/prodi/:id', prodi.updateProdi)
 
 	// JURUSAN
 	router.get('/jurusan', jurusan.getAllJurusan);
+	router.get('/jurusan/:id', jurusan.getJurusanById);
 	router.post('/jurusan', jurusan.createJurusan);
+	router.put('/jurusan/:id', jurusan.updateJurusan)
 
 	// JADWAL
-	router.get('/jadwal', jadwal.getAllJadwal);
+	router.get('/jadwal/', jadwal.getAllJadwal);
+	router.get('/jadwal/:id', jadwal.getJadwalById);
+	router.get('/jadwal-sort-dosen/:sort', jadwal.getSortedDosen);
+	router.post('/jadwal', jadwal.createJadwal);
+	router.put('/jadwal/:id', jadwal.updateJadwal);
+	router.post('/jadwal/filter', jadwal.filterJadwal)
 
 	// JABATAN
 	router.get('/jabatan', jabatan.getAllJabatan);
+	router.get('/jabatan/:id', jabatan.getJabatanById);
 	router.post('/jabatan', jabatan.createJabatan);
+	router.put('/jabatan/:id', jabatan.updateJabatan)
+
+	// SEMESTER
+	router.get('/semester', semester.getAllSemester);
+	router.get('/semester/:id', semester.getSemesterById);
+	router.post('/semester', semester.createSemester);
+
+	// AKADEMIK
+	router.get('/akademik', akademik.getAllAkademik);
+	router.get('/akademik/:id', akademik.getAkademikById);
+	router.post('/akademik', akademik.createAkademik);
 }
