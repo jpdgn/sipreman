@@ -18,7 +18,7 @@ function REST(){
   // this.connectMysql();
 };
 
-var port = process.env.PORT || 3003
+var port = process.env.PORT || 3000
 
 // REST.prototype.connectMysql = function() {
 // 	var self = this;
