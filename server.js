@@ -51,7 +51,7 @@ REST.prototype.ce = function(connection) {
 }
 
 REST.prototype.startServer = function() {
-  app.listen(3003, function(){
+  app.listen(port, function(){
     console.log("Im on port " + port);
   });
 }
