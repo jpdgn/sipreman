@@ -13,7 +13,7 @@ exports.getAllMk = function(req, res) {
 }
 
 exports.getMkById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE id_mk = ?');
+	var sql = ('SELECT * FROM ?? WHERE kode = ?');
 	var insert = ["mata_kuliah", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
@@ -42,7 +42,7 @@ exports.createMk = function(req, res) {
 exports.updateMk = function(req, res) {
 	var data = req.body;
 	var sql = "UPDATE ?? SET ? WHERE ??=?";
-	var insert = ["mata_kuliah", data, "id_mk", req.body.id];
+	var insert = ["mata_kuliah", data, "kode", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, result) {
 		if(err) return res.json({success: false, message: err});

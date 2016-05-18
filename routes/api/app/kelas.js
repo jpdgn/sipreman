@@ -18,7 +18,7 @@ exports.getAllKelas = function(req, res) {
 }
 
 exports.getKelasById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE id_kelas = ?');
+	var sql = ('SELECT * FROM ?? WHERE kode = ?');
 	var insert = ["kelas", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {

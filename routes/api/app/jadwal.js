@@ -1,9 +1,37 @@
 var mysql = require('mysql');
 var connection = require('../../../config/database.js');
+// var bookshelf = require('../../../config/database.js');
+
+// var Jadwal = bookshelf.Model.extend({
+// 	tableName: 'jadwal'
+// })
 
 exports.getAllJadwal = function(req, res) {
-	var query = ('SELECT jadwal.id, kelas.nama as kelas, dosen.nama as dosen, ruangan.nama as ruangan, mata_kuliah.nama as mata_kuliah, jadwal.jam_mulai, jadwal.jam_selesai, jadwal.tanggal FROM jadwal JOIN kelas ON jadwal.kelas_id = kelas.id JOIN dosen ON jadwal.dosen_id = dosen.nip JOIN ruangan ON jadwal.ruangan_id = ruangan.id JOIN mata_kuliah ON jadwal.mata_kuliah_id = mata_kuliah.id');
+	var query = ('SELECT jadwal.kode, jadwal.hari, jadwal.jam_mulai, jadwal.jam_selesai, kelas.kelas, dosen.nama_dosen, mata_kuliah.mata_kuliah, ruangan.ruangan FROM `jadwal` JOIN kelas ON jadwal.id_kelas = kelas.kode JOIN dosen ON jadwal.id_dosen = dosen.nip JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode');
 	connection.query(query, function(err, rows) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			})
+		}
+		return res.json({
+			success: true,
+			data: rows
+		});
+	});
+	// Jadwal.forge().fetchAll().then(function(jadwal) {
+	// 	res.json(jadwal.toJSON())
+	// }).catch(function(err) {
+	// 	console.error(err);
+	// })
+}
+
+exports.getJadwalById = function(req, res) {
+	var sql = ('SELECT * FROM ?? WHERE kode = ?');
+	var insert = ["jadwal", req.params.id];
+	sql = mysql.format(sql, insert);
+	connection.query(sql, function(err, rows) {
 		if(err) {
 			return res.json({
 				success: false,
@@ -17,61 +45,77 @@ exports.getAllJadwal = function(req, res) {
 	});
 }
 
-// exports.getKelasById = function(req, res) {
-// 	var sql = ('SELECT * FROM ?? WHERE id_kelas = ?');
-// 	var insert = ["kelas", req.params.id];
-// 	sql = mysql.format(sql, insert);
-// 	connection.query(sql, function(err, rows) {
-// 		if(err) {
-// 			return res.json({
-// 				success: false,
-// 				message: err
-// 			})
-// 		}
-// 		return res.json({
-// 			success: true,
-// 			data: rows
-// 		});
-// 	});
-// }
+exports.getSortedDosen = function(req, res) {
+	var sql;
+	if (req.params.sort == 'asc') {
+		sql = ('SELECT jadwal.kode, jadwal.hari, jadwal.jam_mulai, jadwal.jam_selesai, kelas.kelas, dosen.nama_dosen, mata_kuliah.mata_kuliah, ruangan.ruangan FROM `jadwal` JOIN kelas ON jadwal.id_kelas = kelas.kode JOIN dosen ON jadwal.id_dosen = dosen.nip JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode ORDER BY dosen.nama_dosen ASC');
+		// var insert = ["jadwal", "dosen", "jadwal.id_dosen", "dosen.nip", "dosen.nama_dosen"];
+	} else if (req.params.sort == 'desc') {
+		sql = ('SELECT jadwal.kode, jadwal.hari, jadwal.jam_mulai, jadwal.jam_selesai, kelas.kelas, dosen.nama_dosen, mata_kuliah.mata_kuliah, ruangan.ruangan FROM `jadwal` JOIN kelas ON jadwal.id_kelas = kelas.kode JOIN dosen ON jadwal.id_dosen = dosen.nip JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode ORDER BY dosen.nama_dosen DESC');
+	}
+	console.log(sql)
+	connection.query(sql, function(err, rows) {
+		if(err) return res.json({success: false, message: err});
+		res.json({success: true, data: rows});
+	});
+}
 
-// exports.createKelas = function(req, res) {
-// 	var data = req.body
-// 	var sql = "INSERT INTO ?? SET ?";
-// 	var insert = ["kelas", data];
-// 	sql = mysql.format(sql, insert);
-// 	connection.query(sql, function(err, result) {
-// 		if(err) {
-// 			return res.json({
-// 				success: false,
-// 				message: err
-// 			})
-// 		}
-// 		return res.json({
-// 			success: true,
-// 			message: "Data kelas berhasil ditambahkan"
-// 		})
-// 	})
-// }
+exports.createJadwal = function(req, res) {
+	var data = req.body
+	var sql = "INSERT INTO ?? SET ?";
+	var insert = ["jadwal", data];
+	sql = mysql.format(sql, insert);
+	connection.query(sql, function(err, result) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			})
+		}
+		return res.json({
+			success: true,
+			message: "Data kelas berhasil ditambahkan"
+		})
+	})
+}
 
-// exports.updateKelas = function(req, res) {
-// 	if(!req.body.nama || !req.body.tahun_masuk || !req.body.jumlah_mahasiswa) return res.json({success: false});
-// 	var sql = "UPDATE ?? SET ??=?,??=?,??=? WHERE id_kelas = ?";
-// 	var insert = ["kelas", "nama_kelas", req.body.nama, "tahun_masuk", req.body.tahun_masuk,
-// 					"jumlah_mahasiswa", req.body.jumlah_mahasiswa, req.params.id];
-// 	sql = mysql.format(sql, insert);
-// 	console.log(sql);
-// 	connection.query(sql, function(err, result) {
-// 		if(err) {
-// 			return res.json({
-// 				success: false,
-// 				message: err
-// 			});
-// 		}
-// 		return res.json({
-// 			success: true,
-// 			message: "Berhasil memperbarui data kelas",
-// 			data: result
-// 		})
-// 	})
-// }
+exports.updateJadwal = function(req, res) {
+	var data = req.body
+	var sql = "UPDATE ?? SET ? WHERE ??=?";
+	var insert = ["jadwal", data, "kode", req.params.id];
+	sql = mysql.format(sql, insert);
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			});
+		}
+		return res.json({
+			success: true,
+			message: "Berhasil memperbarui data kelas",
+			data: result
+		})
+	})
+}
+
+exports.filterJadwal = function(req, res) {
+	var data = req.body
+	var sql = "SELECT jadwal.kode, jadwal.hari, jadwal.jam_mulai, jadwal.jam_selesai, kelas.kelas, dosen.nama_dosen, mata_kuliah.mata_kuliah, ruangan.ruangan FROM `jadwal` JOIN kelas ON jadwal.id_kelas = kelas.kode JOIN dosen ON jadwal.id_dosen = dosen.nip JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode WHERE ?? = ?"
+	var insert = [data.option, data.val]
+	sql = mysql.format(sql, insert)
+	connection.query(sql, function(err, result) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			})
+		}
+		return res.json({
+			success: true,
+			message: 'Berhasil menfilter data',
+			data: result
+		})
+	})
+}

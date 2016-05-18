@@ -11,13 +11,14 @@ var connection = require('./config/database.js');
 function REST(){
   if(connection) {
   	this.ce(connection)
+    console.log('Connection successfully established');
   } else {
   	this.stop();
   }
   // this.connectMysql();
 };
 
-var port = process.env.PORT || 3003
+var port = process.env.PORT || 3000
 
 // REST.prototype.connectMysql = function() {
 // 	var self = this;
@@ -50,7 +51,7 @@ REST.prototype.ce = function(connection) {
 }
 
 REST.prototype.startServer = function() {
-  app.listen(3003, function(){
+  app.listen(port, function(){
     console.log("Im on port " + port);
   });
 }

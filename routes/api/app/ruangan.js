@@ -18,7 +18,7 @@ exports.getAllRuangan = function(req, res) {
 }
 
 exports.getRuanganById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE id_ruangan = ?');
+	var sql = ('SELECT * FROM ?? WHERE kode = ?');
 	var insert = ["ruangan", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
@@ -36,9 +36,9 @@ exports.getRuanganById = function(req, res) {
 }
 
 exports.createRuangan = function(req, res) {
-	var sql = "INSERT INTO ?? (??,??,??,??) VALUES (?,?,?,?)";
-	var insert = ["ruangan", "id_ruangan", "nama_ruangan", "lantai", "kapasitas", 
-					req.body.id, req.body.nama, req.body.lantai, req.body.kapasitas];
+	var data = req.body;
+	var sql = "INSERT INTO ?? SET ?";
+	var insert = ["ruangan", data];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, result) {
 		if(err) {
@@ -55,9 +55,9 @@ exports.createRuangan = function(req, res) {
 }
 
 exports.updateRuangan = function(req, res) {
-	var sql = "UPDATE ?? SET ??=?,??=?,??=? WHERE ??=?";
-	var insert = ["ruangan", "nama_ruangan", req.body.nama, "lantai", req.body.lantai, 
-					"kapasitas", req.body.kapasitas, "id_ruangan", req.params.id];
+	var data = req.body;
+	var sql = "UPDATE ?? SET ? WHERE ??=?";
+	var insert = ["ruangan", data, "kode", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, result) {
 		if(err) {
