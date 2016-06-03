@@ -2,12 +2,17 @@ var express = require('express');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var md5 = require('md5');
+var morgan = require('morgan');
+var jwt = require('jsonwebtoken');
 
 var routes = require("./routes/index.js");
 var cors = require('cors');
 var app = express();
 var connection = require('./config/database.js');
+var secret = require('./config/secret');
 // var connection = new db();
+
+app.use(morgan('dev'));
 function REST(){
   if(connection) {
   	this.ce(connection)

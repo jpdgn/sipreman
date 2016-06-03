@@ -12,10 +12,16 @@ module.exports = function(router, connection, md5){
 	var semester = require('./api/app/semester');
 	var akademik = require('./api/app/akademik');
 	var kehadiran = require('./api/app/kehadiran');
+	var auth = require('./api/app/auth');
 
+	router.post('/auth', auth.appAuth)
+	router.post('/check', auth.checkAuth)
+
+	router.use(auth.checkAuth);
 	router.get('/', function(req, res) {
 		res.json('Hello API');
 	})
+
 
 	// MAHASISWA
 	router.get('/mahasiswa', mahasiswa.getAllMahasiswa);

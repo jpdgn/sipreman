@@ -35,7 +35,8 @@ exports.getAllMahasiswa = function(req, res) {
 
 exports.getMahasiswaByNim = function(req, res) {
 	var sql = ('SELECT * FROM ?? WHERE nim = ?');
-	var insert = ["mahasiswa", req.params.nim];
+	var sql = ('SELECT * FROM mahasiswa JOIN kelas ON mahasiswa.id_kelas = kelas.kode JOIN akademik ON mahasiswa.id_akademik = akademik.kode JOIN semester ON mahasiswa.id_semester = semester.kode WHERE nim = ?')
+	var insert = [req.params.nim];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
 		if(err) return res.json({success: false, message: err});
