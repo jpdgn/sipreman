@@ -70,3 +70,35 @@ exports.checkAuth = function(req, res, next) {
 		});
   }
 }
+
+exports.authMobileApps = function (req, res) {
+	var data = req.body
+	var sql = "SELECT M.*,K.kelas,K.id_prodi,P.prodi,P.id_jurusan,J.jurusan FROM mahasiswa M JOIN kelas K on M.id_kelas = K.kode JOIN prodi P on K.id_prodi = P.kode JOIN jurusan J on P.id_jurusan = J.kode where M.device_id = ? AND M.nim = ?";
+	var insert = [data.device_id, data.nim];
+	sql = mysql.format(sql, insert);
+	connection.query(sql, function(err, result) {
+		if(err) {
+			return res.json({
+				success: false,
+				message: err
+			})
+		}
+    if(!result[0]) {
+      return res.json({
+        success: false,
+        message: "Authentication failed. No user found"
+      })
+    } else if (result[0]) {
+      var expires = moment().add(1, 'days').valueOf();
+      var token = jwt.sign({
+        iss: result[0].id
+      }, app.get('appsecret'), {expiresIn: 86400})
+      return res.json({
+  			success: true,
+        token: token,
+				data: result[0],
+  			message: "Token successfully generated"
+  		})
+    }
+	})
+}

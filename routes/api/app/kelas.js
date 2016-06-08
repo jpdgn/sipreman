@@ -18,7 +18,7 @@ exports.getAllKelas = function(req, res) {
 }
 
 exports.getKelasById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE kode = ?');
+	var sql = ('SELECT * FROM ?? JOIN prodi ON kelas.id_prodi = prodi.kode WHERE kelas.kode = ?');
 	var insert = ["kelas", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {

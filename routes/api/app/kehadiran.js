@@ -19,8 +19,8 @@ exports.getAllKehadiran = function(req, res) {
 }
 
 exports.getKehadiranById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE kode = ?');
-	var insert = ["jadwal", req.params.id];
+	var sql = ('SELECT * FROM ?? WHERE id = ?');
+	var insert = ["kehadiran", req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
 		if(err) {

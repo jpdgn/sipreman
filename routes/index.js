@@ -15,6 +15,7 @@ module.exports = function(router, connection, md5){
 	var auth = require('./api/app/auth');
 
 	router.post('/auth', auth.appAuth)
+	router.post('/authMobile', auth.authMobileApps)
 	router.post('/check', auth.checkAuth)
 
 	router.use(auth.checkAuth);

@@ -28,8 +28,11 @@ exports.getAllJadwal = function(req, res) {
 }
 
 exports.getJadwalById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE kode = ?');
-	var insert = ["jadwal", req.params.id];
+	// var sql = ('SELECT * FROM ?? WHERE kode = ?');
+	// var insert = ["jadwal", req.params.id];
+	// var sql = ('SELECT * FROM ?? JOIN kelas on jadwal.id_kelas = kelas.kode JOIN semester ON jadwal.id_semester = semester.kode JOIN akademik ON jadwal.id_akademik = akademik.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN dosen ON jadwal.id_dosen = dosen.nip WHERE jadwal.kode = ?');
+	var sql = ('SELECT jadwal.kode AS kode_jadwal, mata_kuliah.mata_kuliah as mk, dosen.nama_dosen AS dosen, kelas.kelas AS kelas, jadwal.hari as hari, ruangan.ruangan as ruangan, jadwal.jam_mulai as mulai, jadwal.jam_selesai as selesai, semester.semester as semester, akademik.akademik as akademik  FROM jadwal JOIN kelas on jadwal.id_kelas = kelas.kode JOIN semester ON jadwal.id_semester = semester.kode JOIN akademik ON jadwal.id_akademik = akademik.kode JOIN ruangan ON jadwal.id_ruangan = ruangan.kode JOIN mata_kuliah ON jadwal.id_mk = mata_kuliah.kode JOIN dosen ON jadwal.id_dosen = dosen.nip WHERE jadwal.kode = ?');
+	var insert = [req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
 		if(err) {

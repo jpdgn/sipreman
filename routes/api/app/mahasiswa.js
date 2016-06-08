@@ -57,14 +57,21 @@ exports.createMahasiswa = function(req, res) {
 }
 
 exports.updateMahasiswa = function(req, res) {
+	var numRow
 	var data = req.body;
 	var sql = "UPDATE ?? SET ? WHERE ??=?";
 	var insert = ["mahasiswa", data, "nim", req.params.nim];
 	sql = mysql.format(sql, insert);
 	console.log(sql);
 	connection.query(sql, function(err, rows) {
+		numRow = rows.changedRows
 		if(err) return res.json({success: false, message: err});
-		res.json({success: true, message: "Data mahasiswa berhasil diubah"});
+		console.log(numRow)
+		if(numRow > 0) {
+			return res.json({success: true, message: "Data mahasiswa berhasil diubah"});
+		} else {
+			return res.json({success: true, message: "Tidak ada data yang berubah"});
+		}
 	});
 }
 

@@ -11,8 +11,8 @@ exports.getAllDosen = function(req, res) {
 }
 
 exports.getDosenByNip = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE nip = ?');
-	var insert = ["dosen", req.params.nip];
+	var sql = ('SELECT * FROM dosen JOIN jabatan ON dosen.id_jabatan = jabatan.kode WHERE dosen.nip = ?');
+	var insert = [req.params.nip];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
 		if(err) return res.json({success: false, message: err});
