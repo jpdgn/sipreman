@@ -122,3 +122,22 @@ exports.filterJadwal = function(req, res) {
 		})
 	})
 }
+
+exports.getJadwalList = function (req, res) {
+	var data = req.body
+	var sql = "SELECT MYJ.*, K.kelas, K.id_prodi, P.prodi, P.id_jurusan, J.jurusan, S.semester, AK.akademik, MYR.ruangan, MYR.lantai, MYR.latlong_a, MYR.latlong_b, MYR.latlong_c, MYR.latlong_d, MP.mata_kuliah, MP.bobot, D.nama_dosen, D.no_hp, D.id_jabatan, JB.jabatan FROM `jadwal` MYJ JOIN kelas K ON MYJ.id_kelas = K.kode JOIN prodi P ON K.id_prodi = P.kode JOIN jurusan J ON P.id_jurusan = J.kode JOIN semester S ON MYJ.id_semester = S.kode JOIN akademik AK ON MYJ.id_akademik = AK.kode JOIN ruangan MYR ON MYJ.id_ruangan = MYR.kode JOIN mata_kuliah MP ON MYJ.id_mk = MP.kode JOIN dosen D ON MYJ.id_dosen = D.nip JOIN jabatan JB ON D.id_jabatan = JB.kode WHERE id_kelas = 'TIKTIA' AND id_semester = 'SMT6' AND id_akademik = 'TH1516' AND hari = '2'"
+				var insert = [data.hari, data.id_kelas, data.id_semester, data.id_akademik];
+				sql = mysql.format(sql, insert);
+				connection.query(sql, function(err, rows) {
+					if(err) {
+						return res.json({
+							success: false,
+							message: err
+						})
+					}
+					return res.json({
+						success: true,
+						data: rows
+					});
+				});
+}

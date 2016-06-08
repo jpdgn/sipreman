@@ -74,6 +74,7 @@ module.exports = function(router, connection, md5){
 	router.post('/jadwal', jadwal.createJadwal);
 	router.put('/jadwal/:id', jadwal.updateJadwal);
 	router.post('/jadwal/filter', jadwal.filterJadwal)
+	router.post('/get-jadwal-list', jadwal.getJadwalList);
 
 	// KEHADIRAN
 	router.get('/kehadiran/', kehadiran.getAllKehadiran);
