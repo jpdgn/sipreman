@@ -16,7 +16,7 @@ module.exports = function(router, connection, md5){
 
 	router.post('/auth', auth.appAuth)
 	router.post('/authMobile', auth.authMobileApps)
-	router.post('/check', auth.checkAuth)
+	router.post('/checkToken', auth.checkToken)
 
 	router.use(auth.checkAuth);
 	router.get('/', function(req, res) {

@@ -20,8 +20,9 @@ var connection = require('../../../config/database.js');
 
 exports.getAllMahasiswa = function(req, res) {
 	// var query = ('SELECT mahasiswa.nim as nim, mahasiswa.nama as nama, mahasiswa.email as email, mahasiswa.tahun_masuk, kelas.nama as kelas, prodi.nama as prodi, jurusan.nama as jurusan FROM mahasiswa JOIN kelas ON mahasiswa.kelas_id = kelas.kode JOIN prodi ON kelas.prodi_id = prodi.kode JOIN jurusan ON prodi.jurusan_id = jurusan.kode');
-	var query = ('SELECT * FROM mahasiswa JOIN kelas ON mahasiswa.id_kelas = kelas.kode JOIN akademik ON mahasiswa.id_akademik = akademik.kode JOIN semester ON mahasiswa.id_semester = semester.kode');
+	var query = ("SELECT * FROM mahasiswa JOIN kelas ON mahasiswa.id_kelas = kelas.kode JOIN akademik ON mahasiswa.id_akademik = akademik.kode JOIN semester ON mahasiswa.id_semester = semester.kode WHERE mahasiswa.is_deleted = '0'");
 	connection.query(query, function(err, rows) {
+		console.log(rows.length);
 		if(err) return res.json({success: false, message: err});
 		res.json({success: true, data: rows});
 	});
@@ -77,8 +78,10 @@ exports.updateMahasiswa = function(req, res) {
 
 exports.deleteMahasiswa = function(req, res) {
 	var data = req.params.nim;
-	var sql = "INSERT INTO ?? SELECT * FROM ?? WHERE ?? = ?; DELETE FROM ?? WHERE ?? = ?";
-	var insert = ["mahasiswa_backup", "mahasiswa", "nim", data, "mahasiswa", "nim", data];
+	var sql = "UPDATE mahasiswa SET is_deleted = '1' WHERE nim = ?";
+	var insert = [data];
+	// var sql = "INSERT INTO ?? SELECT * FROM ?? WHERE ?? = ?; DELETE FROM ?? WHERE ?? = ?";
+	// var insert = ["mahasiswa_backup", "mahasiswa", "nim", data, "mahasiswa", "nim", data];
 	// var sql2 = "INSERT INTO ?? SELECT * FROM ?? WHERE ? = ?; DELETE FROM ?? WHERE ?? = ?";
 	// var insert2 = ["mahasiswa_backup", "mahasiswa", "nim", data, "mahasiswa", "nim", data];
 	sql = mysql.format(sql, insert);

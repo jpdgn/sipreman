@@ -18,8 +18,8 @@ exports.getAllProdi = function(req, res) {
 }
 
 exports.getProdiById = function(req, res) {
-	var sql = ('SELECT * FROM ?? WHERE kode = ?');
-	var insert = ["prodi", req.params.id];
+	var sql = ('SELECT p.*, j.jurusan FROM prodi p JOIN jurusan j ON p.id_jurusan = j.kode WHERE p.kode = ?');
+	var insert = [req.params.id];
 	sql = mysql.format(sql, insert);
 	connection.query(sql, function(err, rows) {
 		if(err) {

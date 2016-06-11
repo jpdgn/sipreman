@@ -54,8 +54,8 @@ exports.checkAuth = function(req, res, next) {
           return res.status(403).json({ error:true, message: 'Token has expired'});
         } else {
 					var dateNow = Math.floor(Date.now() / 1000);
-          console.log(decoded.exp)
-          console.log(dateNow)
+          // console.log(decoded.exp)
+          // console.log(dateNow)
           if(decoded.exp <= dateNow) {
             return res.status(400).json({error: 'access token has expired'})
           }
@@ -70,6 +70,35 @@ exports.checkAuth = function(req, res, next) {
 		});
   }
 }
+
+exports.checkToken = function(req, res, next) {
+  var token = (req.body && req.body.token) || (req.query && req.query.token) || req.headers['x-access-token'];
+  if(token) {
+      jwt.verify(token, app.get('appsecret'), function(err, decoded) {
+        if(err) {
+          return res.status(403).json({ isValid:false, message: 'Token has expired'});
+        } else {
+					var dateNow = Math.floor(Date.now() / 1000);
+          // console.log(decoded.exp)
+          // console.log(dateNow)
+          if(decoded.exp <= dateNow) {
+            return res.status(400).json({error: 'access token has expired', isValid: false})
+          }
+          return res.status(200).json({
+						isValid: true,
+						validUntil: decoded.exp,
+						message: 'Token valid'
+					})
+        }
+      })
+  } else {
+    return res.status(403).send({
+			error: true,
+			message: 'No token provided.'
+		});
+  }
+}
+
 
 exports.authMobileApps = function (req, res) {
 	var data = req.body
