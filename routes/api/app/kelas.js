@@ -37,6 +37,7 @@ exports.getKelasById = function(req, res) {
 
 exports.createKelas = function(req, res) {
 	var data = req.body
+	if(!data) res.status(403).json({error: true, message: 'Missing params'})
 	var sql = "INSERT INTO ?? SET ?";
 	var insert = ["kelas", data];
 	sql = mysql.format(sql, insert);
@@ -55,15 +56,15 @@ exports.createKelas = function(req, res) {
 }
 
 exports.updateKelas = function(req, res) {
-	if(!req.body.nama || !req.body.tahun_masuk || !req.body.jumlah_mahasiswa) return res.json({success: false});
-	var sql = "UPDATE ?? SET ??=?,??=?,??=? WHERE id_kelas = ?";
-	var insert = ["kelas", "nama_kelas", req.body.nama, "tahun_masuk", req.body.tahun_masuk,
-					"jumlah_mahasiswa", req.body.jumlah_mahasiswa, req.params.id];
+	if(!req.body.kelas || !req.body.id_prodi) return res.status(403).json({success: false, message: 'Missing some parameters'});
+	var data = req.body
+	var sql = "UPDATE ?? SET ? WHERE kode = ?";
+	var insert = ["kelas", data, req.params.id];
 	sql = mysql.format(sql, insert);
 	console.log(sql);
 	connection.query(sql, function(err, result) {
 		if(err) {
-			return res.json({
+			return res.status(403).json({
 				success: false,
 				message: err
 			});

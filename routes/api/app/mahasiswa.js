@@ -24,7 +24,7 @@ exports.getAllMahasiswa = function(req, res) {
 	connection.query(query, function(err, rows) {
 		console.log(rows.length);
 		if(err) return res.json({success: false, message: err});
-		res.json({success: true, data: rows});
+		res.json({success: true, data: rows, rows: rows.length});
 	});
 	// MahasiswaCollection.query(function(qb) {
 	// 	qb.join('kelas', 'mahasiswa.kelas_id', 'kode')

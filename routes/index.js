@@ -12,6 +12,7 @@ module.exports = function(router, connection, md5){
 	var semester = require('./api/app/semester');
 	var akademik = require('./api/app/akademik');
 	var kehadiran = require('./api/app/kehadiran');
+	var kompensasi = require('./api/app/kompensasi');
 	var auth = require('./api/app/auth');
 
 	router.post('/auth', auth.appAuth)
@@ -82,6 +83,9 @@ module.exports = function(router, connection, md5){
 	router.post('/kehadiran', kehadiran.createKehadiran);
 	router.put('/kehadiran/:id', kehadiran.updateKehadiran);
 	router.post('/kehadiran/filter', kehadiran.filterKehadiran)
+
+	// KOMPENSASI
+	router.get('/kompensasi/', kompensasi.getKompensasi)
 
 	// JABATAN
 	router.get('/jabatan', jabatan.getAllJabatan);

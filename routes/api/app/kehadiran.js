@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var connection = require('../../../config/database.js');
+var moment = require('moment');
 
 exports.getAllKehadiran = function(req, res) {
 	// var query = ('SELECT * FROM kehadiran');
@@ -38,21 +39,42 @@ exports.getKehadiranById = function(req, res) {
 
 exports.createKehadiran = function(req, res) {
 	var data = req.body
-	var sql = "INSERT INTO ?? SET ?";
-	var insert = ["kehadiran", data];
-	sql = mysql.format(sql, insert);
-	connection.query(sql, function(err, result) {
-		if(err) {
-			return res.json({
-				success: false,
-				message: err
-			})
+	var jam_presensi = data.jam_presensi
+	var kompensasi
+	var sql1 = "SELECT * FROM jadwal WHERE kode=?";
+	var insert1 = [data.kode_jadwal];
+	sql1 = mysql.format(sql1, insert1)
+	connection.query(sql1, function(err, result) {
+		if(err) res.json({success: false, message: err})
+		var jamMulai = result[0].jam_mulai
+		var jamSelesai = result[0].jam_selesai
+		var durasiObj = moment.utc(moment(jamSelesai,"HH:mm:ss").diff(moment(jamMulai,"HH:mm:ss"))).format("HH:mm:ss")
+		var durasi = moment.duration(durasiObj.toString()).asMinutes()
+		var keterlambatanObj = moment.utc(moment(jam_presensi,"HH:mm:ss").diff(moment(jamMulai,"HH:mm:ss"))).format("HH:mm:ss")
+		var keterlambatan = moment.duration(keterlambatanObj.toString()).asMinutes()
+		console.log("Durasi :" + durasi);
+		console.log("Keterlambatan :" + keterlambatan);
+		if(keterlambatan >= 5 && keterlambatan <= 50) {
+			kompensasi = keterlambatan*5
+		} else if(keterlambatan > 90) {
+			kompensasi = durasi
 		}
-		return res.json({
-			success: true,
-			message: "Data kehadiran berhasil ditambahkan"
-		})
 	})
+	// var sql = "INSERT INTO ?? SET ?";
+	// var insert = ["kehadiran", data];
+	// sql = mysql.format(sql, insert);
+	// connection.query(sql, function(err, result) {
+	// 	if(err) {
+	// 		return res.json({
+	// 			success: false,
+	// 			message: err
+	// 		})
+	// 	}
+	// 	return res.json({
+	// 		success: true,
+	// 		message: "Data kehadiran berhasil ditambahkan"
+	// 	})
+	// })
 }
 
 exports.updateKehadiran = function(req, res) {
